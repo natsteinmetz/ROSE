@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8'?> 
+<!DOCTYPE rdf:RDF [
+     <!ENTITY rdf 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'>
+     <!ENTITY myNS 'http://test.example.org/test#'>
+     <!ENTITY rdfs 'http://www.w3.org/2000/01/rdf-schema#'>
+]> 
+
+<rdf:RDF xmlns:myNS="&myNS;"
+     xmlns:rdf="&rdf;"
+     xmlns:rdfs="&rdfs;">
+
+<rdfs:Class rdf:about="&myNS;Animal" />
+
+<rdfs:Class rdf:about="&myNS;Person">
+    <rdfs:subClassOf rdf:resource="&myNS;Animal"/>
+</rdfs:Class>
+
+<rdfs:Class rdf:about="&myNS;Man">
+    <rdfs:subClassOf rdf:resource="&myNS;Person"/>
+</rdfs:Class>
+
+<rdfs:Class rdf:about="&myNS;Woman">
+    <rdfs:subClassOf rdf:resource="&myNS;Person"/>
+</rdfs:Class>
+
+<rdfs:Class rdf:about="&myNS;Child">
+    <rdfs:subClassOf rdf:resource="&myNS;Person"/>
+</rdfs:Class>
+
+<rdf:Property rdf:about="&myNS;hasParent">
+	<rdfs:subPropertyOf rdf:resource="&myNS;hasRelative"/>
+    <rdfs:domain rdf:resource="&myNS;Child"/>
+    <rdfs:range rdf:resource="&myNS;Person"/>
+</rdf:Property>
+
+<rdf:Property rdf:about="&myNS;hasMother">
+    <rdfs:subPropertyOf rdf:resource="&myNS;hasParent"/>
+    <rdfs:domain rdf:resource="&myNS;Child"/>
+    <rdfs:range rdf:resource="&myNS;Woman"/>
+</rdf:Property> 
+
+<rdf:Property rdf:about="&myNS;hasFather">
+	<rdfs:subPropertyOf rdf:resource="&myNS;Parent"/>
+    <rdfs:domain rdf:resource="&myNS;Child"/>
+    <rdfs:range rdf:resource="&myNS;Man"/>
+</rdf:Property>
+
+<rdf:Property rdf:about="&myNS;hasName">
+    <rdfs:domain rdf:resource="&myNS;Person"/>
+    <rdfs:range rdf:resource="&rdfs;Literal"/>
+</rdf:Property>
+
+<myNS:Man rdf:about="&myNS;john">
+	<myNS:hasMother rdf:resource="&myNS;anna"/>
+	<myNS:hasName>John</myNS:hasName>
+</myNS:Man>
+
+<myNS:Woman rdf:about="&myNS;anna">
+	<myNS:hasName>Anna</myNS:hasName>
+</myNS:Woman>
+
+<!-- extra non-standard use of RDFS vocabulary -->
+<rdf:Description rdf:about="&rdfs;domain">
+	<rdf:type rdf:resource="&myNS;testType" />
+</rdf:Description>
+<rdf:Description rdf:about="&rdfs;range">
+	<rdfs:subClassOf rdf:resource="&myNS;testType" />
+</rdf:Description>
+
+</rdf:RDF>

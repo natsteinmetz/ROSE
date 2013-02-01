@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment 
+	xmlns="http://xml.apache.org/axis/wsdd/" 
+	xmlns:java="http://xml.apache.org/axis/wsdd/providers/java"
+	xmlns:val="http://tools.deri.org/rdfs-reasoner/v0.1/">
+ 
+  <handler name="URLMapper" type="java:org.apache.axis.handlers.http.URLMapper"/>
+      
+  <service name="rdfs_reasoner" provider="java:RPC">
+      <namespace>http://tools.deri.org/rdfs-reasoner/v0.1/</namespace>
+      <parameter name="allowedMethods" value="*"/>
+      <parameter name="className" value="org.deri.rdfs.reasoner.RDFSReasonerWS"/>
+      <beanMapping qname="val:VariableBindung" 
+          type="java:org.deri.rdfs.reasoner.VariableBinding"/>
+      <endpointURL>http://tools.deri.org/rdfs-reasoner/v0.1/services/rdfs_reasoner</endpointURL>    
+  </service>
+ 
+ <transport name="http">
+  <requestFlow>
+   <handler type="URLMapper"/>
+   <handler type="java:org.apache.axis.handlers.http.HTTPAuthHandler"/>
+  </requestFlow>
+  <parameter name="qs:list" value="org.apache.axis.transport.http.QSListHandler"/>
+  <parameter name="qs:wsdl" value="org.apache.axis.transport.http.QSWSDLHandler"/>
+  <parameter name="qs:method" value="org.apache.axis.transport.http.QSMethodHandler"/>
+ </transport>
+ <transport name="local">
+  <responseFlow>
+   <handler type="LocalResponder"/>
+  </responseFlow>
+ </transport>
+</deployment>

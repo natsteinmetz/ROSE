@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8'?> 
+<!DOCTYPE rdf:RDF [
+     <!ENTITY rdf 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'>
+     <!ENTITY myNS 'http://test.example.org/test#'>
+     <!ENTITY rdfs 'http://www.w3.org/2000/01/rdf-schema#'>
+]> 
+
+<rdf:RDF xmlns:myNS="&myNS;"
+     xmlns:rdf="&rdf;"
+     xmlns:rdfs="&rdfs;">
+
+<rdf:Description rdf:about="&myNS;Person">
+    <rdfs:subClassOf rdf:resource="&myNS;Animal"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="&myNS;Man">
+    <rdfs:subClassOf rdf:resource="&myNS;Person"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="&myNS;Woman">
+    <rdfs:subClassOf rdf:resource="&myNS;Person"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="&myNS;Child">
+    <rdfs:subClassOf rdf:resource="&myNS;Person"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="&myNS;hasParent">
+	<rdfs:subPropertyOf rdf:resource="&myNS;hasRelative"/>
+    <rdfs:domain rdf:resource="&myNS;Child"/>
+    <rdfs:range rdf:resource="&myNS;Person"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="&myNS;hasMother">
+    <rdfs:subPropertyOf rdf:resource="&myNS;hasParent"/>
+    <rdfs:domain rdf:resource="&myNS;Child"/>
+    <rdfs:range rdf:resource="&myNS;Woman"/>
+</rdf:Description> 
+
+<rdf:Description rdf:about="&myNS;hasFather">
+	<rdfs:subPropertyOf rdf:resource="&myNS;hasParent"/>
+    <rdfs:domain rdf:resource="&myNS;Child"/>
+    <rdfs:range rdf:resource="&myNS;Man"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="&myNS;hasName">
+    <rdfs:domain rdf:resource="&myNS;Person"/>
+    <rdfs:range rdf:resource="&rdfs;Literal"/>
+</rdf:Description>
+
+<myNS:Man rdf:about="&myNS;john">
+	<myNS:hasMother rdf:resource="&myNS;anna"/>
+	<myNS:hasName>John</myNS:hasName>
+</myNS:Man>
+
+<myNS:Woman rdf:about="&myNS;anna">
+	<myNS:hasName>Anna</myNS:hasName>
+</myNS:Woman>
+
+<!-- two descriptions for showing extensional RDFS entailment -->
+
+<rdf:Description rdf:about="&myNS;isRelatedTo">
+    <rdfs:domain rdf:resource="&myNS;Person"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="&myNS;isAncestorOf">
+    <rdfs:subPropertyOf rdf:resource="&myNS;isRelatedTo"/>
+</rdf:Description>
+
+</rdf:RDF>

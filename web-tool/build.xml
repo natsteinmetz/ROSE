@@ -1,0 +1,111 @@
+<project name="RDFS Reasoner" basedir="." default="tomcat.package">
+
+	<tstamp />
+  
+	<property name="tomcat.path" value="rdfs-reasoner-${DSTAMP}" /> 
+	<!--
+	<property name="tomcat.host" value="localhost" />
+	<property name="tomcat.url" value="http://${tomcat.host}:8080/manager" />  
+	<property name="tomcat.username" value="admin" />
+	<property name="tomcat.password" value="admin" /> 
+	-->	
+	<property name="tomcat.host" value="192.168.65.141" />
+	<property name="tomcat.url" value="http://${tomcat.host}:8000/manager" /> 
+	<property name="tomcat.username" value="nathalie" />
+	
+    <property name="dir.web" location="web" />
+    <property name="dir.dist" location="dist" />
+    <property name="dir.src" value="src" />
+    <property name="dir.build" location="build" />
+    <property name="dir.lib" location="lib" />
+
+	<target name="chose_user_password">
+	    <input message="Username for tomcat on ${tomcat.host}:"
+	           addproperty="tomcat.username" />
+	    <input message="Password for tomcatuser ${tomcat.username} on ${tomcat.host}:"
+	           addproperty="tomcat.password" />
+	  </target>	
+	
+  <path id="classpath">
+    <fileset dir="${dir.lib}">
+      <include name="**/*.jar" />
+    </fileset>
+  </path>
+
+  <target name="tomcat.package"
+          depends="tomcat.prepare"
+          description="Packages the WAR file">
+    <echo message="Packaging the WAR...." />
+    <delete dir="${dir.dist}" failonerror="no" />
+    <mkdir dir="${dir.dist}" />
+    <jar jarfile="${dir.dist}/${warfile}">
+      <fileset dir="${dir.build}" includes="**" />
+    </jar>
+<!--    <delete dir="${dir.build}" />-->
+  </target>
+
+  <target name="tomcat.prepare" description="Creates the build directory">
+    <delete dir="${dir.build}" failonerror="no" />
+    <mkdir dir="${dir.build}" />
+    <mkdir dir="${dir.build}/WEB-INF/classes" />
+    <copy todir="${dir.build}">
+      <fileset dir="${dir.web}" />
+    </copy>
+  	<!--copy libraries...-->
+    <copy todir="${dir.build}/WEB-INF/lib" flatten="true">
+      <fileset dir="${dir.lib}" 
+        includes="**/commons-logging/1.1/*.jar,**/jgrapht/*.jar,**/rdfs-reasoner/*jar,**/sesame/1.2.4/*.jar,**/wsmo4j*/*.jar,**/axis/*.jar,**/log4j/1.2.7/*.jar,**/iris/*.jar" />
+    </copy>
+    <javac classpathref="classpath"
+    	   srcdir="${dir.src}"
+           debug="on"
+           source="1.5"
+    	   includes="**/*.java"
+           target="1.5"
+           destdir="${dir.build}/WEB-INF/classes" />
+  </target>
+
+  <target name="tomcat.undeploy" 
+    	  depends="chose_user_password"
+          description="Undeploys Application from Tomcat server">
+    <undeploy url="${tomcat.url}"
+              username="${tomcat.username}"
+              password="${tomcat.password}"
+              path="/${tomcat.path}" />
+  </target>
+
+  <target name="tomcat.deploy" depends="tomcat.package, chose_user_password"
+          description="Deploys Application on Tomcat server">
+    <deploy url="${tomcat.url}"
+            username="${tomcat.username}"
+            password="${tomcat.password}"
+            path="/${tomcat.path}"
+            war="${dir.dist}/${warfile}" />
+  </target>
+
+  <target name="tomcat.redeploy"
+          depends="tomcat.undeploy,tomcat.deploy"
+          description="RE-Deploys Application on Tomcat server">
+  </target>
+
+  <taskdef name="axis-admin"
+	      classname="org.apache.axis.tools.ant.axis.AdminClientTask"
+	      classpathref="classpath" />
+
+  <taskdef name="axis-admin"
+	      classname="org.apache.axis.tools.ant.axis.AdminClientTask"
+	      classpathref="classpath" />
+
+  <taskdef name="wsdl2java"
+	      classname="org.apache.axis.tools.ant.wsdl.Wsdl2javaAntTask"
+	      classpathref="classpath" />
+  
+  <taskdef name="deploy" classname="org.apache.catalina.ant.DeployTask">
+    <classpath refid="classpath" />
+  </taskdef>
+
+  <taskdef name="undeploy" classname="org.apache.catalina.ant.UndeployTask">
+    <classpath refid="classpath" />
+  </taskdef>
+
+</project>

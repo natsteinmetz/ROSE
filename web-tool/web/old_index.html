@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>RDFS Reasoner</title>
+  <link rel="shortcut icon" href="favicon.ico"/>
+  <link rel='stylesheet' type='text/css' href='wsml.css'/>
+<script language="JavaScript" src="scripts/page.js" type="text/javascript"></script>
+	<title>DERI RDFS-Reasoner</title>
+	<meta name="author" content="Nathalie Steinmetz" />
+	<meta name="description" content="The major objective of the Digital Enterprise Research Institute (DERI) is to bring current Web technology to its full potential by combining and improving recent trends around the Web."/>
+
+<script type="text/javascript">
+
+// decrypt helper function
+function decryptCharcode(n,start,end,offset) {
+	n = n + offset;
+	if (offset > 0 && n > end)	{
+		n = start + (n - end - 1);
+	} else if (offset < 0 && n < start)	{
+		n = end - (start - n - 1);
+	}
+	return String.fromCharCode(n);
+}
+
+// decrypt string
+function decryptString(enc,offset) {
+	var dec = "";
+	var len = enc.length;
+	for(var i=0; i < len; i++)	{
+		var n = enc.charCodeAt(i);
+		if (n >= 0x2B && n <= 0x3A)	{
+			dec += decryptCharcode(n,0x2B,0x3A,offset);	// 0-9 . , - + / :
+		} else if (n >= 0x40 && n <= 0x5A)	{
+			dec += decryptCharcode(n,0x40,0x5A,offset);	// A-Z @
+		} else if (n >= 0x61 && n <= 0x7A)	{
+			dec += decryptCharcode(n,0x61,0x7A,offset);	// a-z
+		} else {
+			dec += enc.charAt(i);
+		}
+	}
+	return dec;
+}
+
+// decrypt spam-protected emails
+function linkTo_UnCryptMailto(s)	{
+	location.href = decryptString(s,1);
+}
+
+</script>
+
+</head>
+
+<body>
+
+<div class="box">
+
+<h1>RDFS Reasoner - Overview</h1>
+<br />
+<br />
+  <p>The RDFS Reasoner currently supports the RDF entailment regime and the RDFS entailment 
+  regime. It uses <a href="http://sourceforge.net/projects/iris-reasoner/">IRIS</a> as 
+  underlying reasoning engine.
+  <br /><br />
+  As queries only WSML conjunctive queries are allowed. Such a query is build by 
+  conjunctions of WSML attribute value molecules. Variables start with a '?' 
+  and 'hasValue' is a mandatory WSML keyword. If a namespace other than 
+  the default namespace is part of the query, it's prefix can be used as follows: 
+  rdf#localname. <br />
+  E.g.: 
+  <ul>
+    <li>?paper[hasAuthor <b>hasValue</b> ?author] and ?paper[submittedTo 
+  <b>hasValue</b> ISWC] </li>
+    <li>?x[rdf#type <b>hasValue</b> ?y]</li>
+  </ul>
+  </p>
+  <p>
+  The source code contains an example that shows how to use the RDFS Reasoner (e.g. parse an 
+  RDFS file, create a reasoner, register the ontology at the reasoner, execute queries,...).
+  </p>
+  <p>
+  The release rdfs-reasoner v0.1 can be downloaded at 
+  <a href="http://tools.deri.org/rdfs-reasoner/releases/v0.1/rdfs-reasoner-v0.1.zip">rdfs-reasoner v0.1</a>. 
+  </p>
+  
+  <p>
+  An online demo will be available soon at this place.
+  </p>
+</body>
+</html>

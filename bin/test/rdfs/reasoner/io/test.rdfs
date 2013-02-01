@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8'?> 
+<!DOCTYPE rdf:RDF [
+     <!ENTITY rdf 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'>
+     <!ENTITY ex 'http://test.example.org/wsmo4j#'>
+     <!ENTITY foaf 'http://xmlns.com/foaf/0.1/'>
+     <!ENTITY xsd 'http://www.w3.org/2001/XMLSchema#'>
+     <!ENTITY rdfs 'http://www.w3.org/2000/01/rdf-schema#'>
+     <!ENTITY xsi 'http://www.w3.org/2001/XMLSchema-instance#'>
+]> 
+
+<rdf:RDF xmlns:ex="&ex;"
+     xmlns:rdf="&rdf;"
+     xmlns:foaf="&foaf;"
+     xmlns:xsd="&xsd;"
+     xmlns:xsi="&xsi;"
+     xmlns:rdfs="&rdfs;">
+
+<rdfs:Class rdf:about="&ex;TestA" rdfs:label="the root class"/>
+
+<rdfs:Class rdf:about="&ex;TestB">
+    <rdfs:subClassOf rdf:resource="&ex;TestA"/>
+</rdfs:Class>
+
+<rdfs:Class rdf:about="&ex;TestC">
+    <rdfs:subClassOf rdf:resource="&ex;TestA"/>
+</rdfs:Class>
+
+<rdfs:Class rdf:about="&ex;TestD"/>
+
+<rdf:Property rdf:about="&ex;propertyA">
+    <rdfs:domain rdf:resource="&ex;TestA"/>
+    <rdfs:range rdf:resource="&ex;TestD"/>
+</rdf:Property>
+
+<rdf:Property rdf:about="&ex;propertyB">
+	<rdfs:comment>this relates a date to the class</rdfs:comment>
+    <rdfs:domain rdf:resource="&ex;TestA"/>
+    <rdfs:range rdf:resource="&xsd;date"/>
+</rdf:Property> 
+
+<rdf:Property rdf:about="&ex;propertyC">
+	<rdfs:subPropertyOf rdf:resource="&ex;propertyB"/>
+    <rdfs:domain rdf:resource="&ex;TestB"/>
+    <rdfs:range rdf:resource="&xsd;dateTime"/>
+</rdf:Property>
+
+<rdf:Property rdf:about="&xsi;type">
+    <rdfs:domain rdf:resource="&ex;TestB"/>
+    <rdfs:range rdf:resource="&xsd;string"/>
+</rdf:Property>
+
+</rdf:RDF>
